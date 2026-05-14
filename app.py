@@ -81,8 +81,6 @@ Antes de iniciar uma frase apresente-se de forma amigável com a seguinte frase:
 
 - DIRETRIZES DE PERSONALIZAÇÃO (NÍVEIS 1 A 4):
 
-
-
 NÍVEL 1: Operacional/Básico (/N1). Para trabalhadores sem formação. Linguagem direta, "O que fazer".
 Exemplos N1: (1. Fio desencapado: Pare! Não encoste. 2. Escada: Não suba sem sapata. 3. Cheiro de gás: Saia e ventile. 4. Bota: Protege contra pregos. 5. Cinto: Use acima de 2m. 6. Protetor: Surdez é definitiva. 7. Olho: Lave 15min. 8. Empilhadeira: Ponto cego. 9. Extintor: Não obstrua. 10. Máscara: Poeira no pulmão. 11. Andaime: Trave antes. 12. Luva: Troque se rasgar. 13. Calor: Beba água. 14. Piso: Sinalize molhado. 15. Lixadeira: Use coifa. 16. Altura: Nunca sozinho. 17. Choque: Pare a máquina. 18. Chão: Limpeza evita queda. 19. Peso: Use as pernas. 20. Óculos: Não tire nunca.)
 
@@ -94,6 +92,20 @@ Exemplos N3: (1. PGR/PCMSO: Integração. 2. FISPQ/NR-20: Área classificada. 3.
 
 NÍVEL 4: Estratégico/Mestre (/N4). Para Diretores/Consultores. Risco jurídico e financeiro.
 Exemplos N4: (1. Resp. Civil Subjetiva. 2. RAT/NTEP. 3. ESG/PGR. 4. Prova Pericial. 5. Direito Recusa formal. 6. Compliance OIT. 7. Acordado s/ Legislado. 8. Substituição EPC. 9. Dano Estético Súmula 387. 10. AVCB/Seguro. 11. Concausalidade. 12. Prescrição 5/20 anos. 13. Data Book MTE. 14. Lucro Cessante interdição. 15. Design Safety. 16. Lei 13.429 Terceiros. 17. LTIFR Sustentabilidade. 18. Crime Perigo Art 132. 19. Gestão Mudanças. 20. Ativo de Marca.)
+
+- PROTOCOLO DE ALTA VELOCIDADE (ANTI-TRAVAMENTO):
+
+1. Priorize a lógica direta: Identificar Classe -> Definir Risco -> Citar Medida.
+2. Em consultas complexas (N3/N4), use tabelas Markdown simplificadas para agilizar a renderização.
+3. Não faça introduções longas em perguntas técnicas. Vá direto ao dado normativo.
+4. Utilize seu conhecimento prévio de todas as NRs (1 a 38) de forma sintetizada.
+
+- MEMÓRIA TÉCNICA RÁPIDA (PARA EVITAR LENTIDÃO):
+
+NR-20 Classe I: Postos de serviço, atividades varejistas.
+NR-20 Classe II: Engarrafadoras, transporte, usinas biodiesel, extração (capacidade média).
+NR-20 Classe III: Refinarias, processamento de gás, petroquímicas (grande escala).
+Medidas de Engenharia (Dispersão): Ventilação Local Exauridora (VLE), Inertização (N2), Detecção de Misturas Explosivas (>10% LII), Aterramento.
 
 - COMANDOS ESPECIAIS:
 /aula: Analogias simples (ETEC). /check: Checklist de inspeção. /risco: Apontar violações.
@@ -131,6 +143,13 @@ if api_key:
             with st.chat_message("user"):
                 st.markdown(prompt)
 
+            # Ajustes finos para evitar o "engasgo" do modelo Flash-Lite
+        config_geracao = {
+            "temperature": 0.1, 
+            "top_p": 0.8,
+            "top_k": 20, # Reduzimos o vocabulário para a IA decidir mais rápido
+            "max_output_tokens": 1024, # Respostas mais curtas e diretas são mais rápidas
+        }
             with st.chat_message("assistant"):
                 # Preparar conteúdo (Texto + Imagem se houver)
                 conteudo = [prompt]
@@ -140,7 +159,11 @@ if api_key:
                     conteudo.append(img_ready)
                 
                 # Resposta com Streaming
-                response = model.generate_content(conteudo, stream=True)
+                response = model.generate_content(
+                    conteudo, 
+                    stream=True, 
+                    generation_config=config_geracao  
+                )
                 
                 def stream_text():
                     for chunk in response:
