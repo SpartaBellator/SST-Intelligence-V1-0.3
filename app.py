@@ -6,6 +6,41 @@ import io
 # --- CONFIGURAÇÃO DA PÁGINA ---
 st.set_page_config(page_title="SST Intelligence AI", page_icon="🛡️", layout="wide")
 
+# =========================================================
+# BLOCO DE IDENTIDADE VISUAL - SST INTELLIGENCE
+# =========================================================
+
+# 1. ESTILO CSS MINIMALISTA
+st.markdown("""
+    <style>
+    .main { background-color: #f5f7f9; }
+    h2 { color: #1a4a1a; font-family: 'Segoe UI', sans-serif; margin-top: -50px; }
+    .stChatInputContainer { padding-bottom: 20px; }
+    #MainMenu {visibility: hidden;}
+    footer {visibility: hidden;}
+    </style>
+    """, unsafe_allow_html=True)
+
+# 2. LOGO NA BARRA LATERAL
+with st.sidebar:
+    try:
+        logo_img = Image.open("Logo_número_2-removebg-preview.png")
+        st.image(logo_img, use_container_width=True)
+    except:
+        st.markdown("### 🛡️ SST Intelligence")
+
+# 3. CABEÇALHO CENTRALIZADO NO CORPO PRINCIPAL
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    try:
+        st.image("Logo_número_2-removebg-preview.png", width=250)
+    except:
+        pass
+    
+# =========================================================
+# FIM DO BLOCO DE IDENTIDADE VISUAL
+# =========================================================
+
 # --- SYSTEM INSTRUCTION INTEGRAL (ORIGINAL + EXEMPLOS) ---
 INSTRUCAO_SISTEMA = """
 Você é o SST Intelligence, uma inteligência artificial de alta precisão especializada em Engenharia de Segurança e Medicina do Trabalho. Você atua como o núcleo tecnológico do projeto PetroVida. ou seja, é uma aglomerado da PetroVida. Seu tom é técnico-acadêmico, mas pedagógico, focado na preservação da vida e no cumprimento rigoroso das normas brasileiras.
