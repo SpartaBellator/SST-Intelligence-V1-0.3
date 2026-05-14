@@ -143,26 +143,25 @@ if api_key:
             with st.chat_message("user"):
                 st.markdown(prompt)
 
-            # Ajustes finos para evitar o "engasgo" do modelo Flash-Lite
-        config_geracao = {
-            "temperature": 0.1, 
-            "top_p": 0.8,
-            "top_k": 20, # Reduzimos o vocabulário para a IA decidir mais rápido
-            "max_output_tokens": 1024, # Respostas mais curtas e diretas são mais rápidas
-        }
+            # --- O CONFIG DEVE FICAR ALINHADO COM O "WITH" ABAIXO ---
+            config_geracao = {
+                "temperature": 0.1, 
+                "top_p": 0.8,
+                "top_k": 20,
+                "max_output_tokens": 1024,
+            }
+
             with st.chat_message("assistant"):
-                # Preparar conteúdo (Texto + Imagem se houver)
                 conteudo = [prompt]
-                img_ready = None
                 if file:
                     img_ready = processar_imagem(file)
                     conteudo.append(img_ready)
                 
-                # Resposta com Streaming
+                # Resposta com Streaming e Configuração de Velocidade
                 response = model.generate_content(
                     conteudo, 
                     stream=True, 
-                    generation_config=config_geracao  
+                    generation_config=config_geracao
                 )
                 
                 def stream_text():
